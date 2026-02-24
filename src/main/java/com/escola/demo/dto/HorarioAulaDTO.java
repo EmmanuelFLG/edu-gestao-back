@@ -11,6 +11,8 @@ public class HorarioAulaDTO {
     private String horaFim;
     private String sala;
 
+    private Integer aulaNumero;
+
     private Long alocacaoId;
     private String professorNome;
     private String disciplinaNome;

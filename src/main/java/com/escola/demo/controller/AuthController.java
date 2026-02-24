@@ -1,8 +1,8 @@
 package com.escola.demo.controller;
 
+import com.escola.demo.model.Aluno;
 import com.escola.demo.model.Role;
 import com.escola.demo.model.Usuario;
-import com.escola.demo.model.Aluno; // ✅ IMPORTANTE
 import com.escola.demo.repository.RoleRepository;
 import com.escola.demo.repository.UsuarioRepository;
 import com.escola.demo.service.JwtService;
@@ -58,15 +58,12 @@ public class AuthController {
                 "id", usuario.getId(),
                 "nome", usuario.getNome(),
                 "email", usuario.getEmail(),
-                "roles", roles
-        );
+                "roles", roles);
 
         return ResponseEntity.ok(
                 Map.of(
                         "token", token,
-                        "usuario", usuarioMap
-                )
-        );
+                        "usuario", usuarioMap));
     }
 
     // ================= REGISTER =================
@@ -82,7 +79,7 @@ public class AuthController {
         Role roleAluno = roleRepo.findByNome("ALUNO")
                 .orElseThrow(() -> new RuntimeException("Role ALUNO não encontrada"));
 
-        // ✅ AGORA INSTANCIAMOS A CLASSE CONCRETA
+        // AGORA INSTANCIAMOS A CLASSE CONCRETA
         Aluno usuario = new Aluno();
 
         usuario.setNome(req.getNome());
@@ -90,14 +87,13 @@ public class AuthController {
         usuario.setSenha(passwordEncoder.encode(req.getPassword()));
         usuario.setRoles(List.of(roleAluno));
 
-        // 🔥 Geração automática de matrícula
-        usuario.setMatricula("MAT-" + UUID.randomUUID().toString().substring(0,8));
+        // Geração automática de matrícula
+        usuario.setMatricula("MAT-" + UUID.randomUUID().toString().substring(0, 8));
 
         usuarioRepo.save(usuario);
 
         return ResponseEntity.ok(
-                Map.of("message", "Usuário cadastrado com sucesso")
-        );
+                Map.of("message", "Usuário cadastrado com sucesso"));
     }
 
     // ================= DTOs =================
@@ -114,4 +110,5 @@ public class AuthController {
         private String email;
         private String password;
     }
+
 }

@@ -24,26 +24,23 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            // 1. ATIVA O CORS (Crucial para parar o erro no navegador)
-            .cors(Customizer.withDefaults()) 
-            
-            // 2. DESATIVA O CSRF (Obrigatório para APIs REST)
-            .csrf(csrf -> csrf.disable())
-            
-            .authorizeHttpRequests(auth -> auth
-                // Libera o login
-                .requestMatchers("/api/auth/**").permitAll()
-                
-                // LIBERA AS ROTAS DO DIÁRIO (Para você não ter erro de Token agora)
-                .requestMatchers("/turmas/**").permitAll()
-                .requestMatchers("/presencas/**").permitAll()
-                .requestMatchers("/dashboard/**").permitAll()
-                
-                // O resto ainda exige autenticação
-                .anyRequest().authenticated()
-            )
-            .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                .cors(Customizer.withDefaults())
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
+                        // 2. Liberação de Login
+                        .requestMatchers("/api/auth/**").permitAll()
+
+                        // 3. Liberação TOTAL das rotas do Dashboard (Coloque todas aqui)
+                        .requestMatchers("/notas/**").permitAll()
+                        .requestMatchers("/matriculas/**").permitAll()
+                        .requestMatchers("/alocacoes/**").permitAll()
+                        .requestMatchers("/presencas/**").permitAll()
+                        .requestMatchers("/horarios/**").permitAll()
+                        .requestMatchers("/turmas/**").permitAll()
+
+                        .anyRequest().authenticated())
+                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

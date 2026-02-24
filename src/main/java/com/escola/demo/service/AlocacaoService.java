@@ -25,6 +25,7 @@ public class AlocacaoService {
     private final DisciplinaRepository disciplinaRepo;
     private final TurmaRepository turmaRepo;
 
+    // Construtor unico com todas as dependencias necessarias
     public AlocacaoService(AlocacaoRepository repo,
                            ProfessorRepository professorRepo,
                            DisciplinaRepository disciplinaRepo,
@@ -34,6 +35,22 @@ public class AlocacaoService {
         this.disciplinaRepo = disciplinaRepo;
         this.turmaRepo = turmaRepo;
     }
+
+    // --- METODOS DE CONSULTA (Usados pelo Dashboard e Frontend) ---
+
+    public List<Alocacao> buscarPorTurma(Long turmaId) {
+        return repo.findByTurmaId(turmaId);
+    }
+
+    public List<Alocacao> buscarPorProfessor(Long professorId) {
+        return repo.findByProfessorId(professorId);
+    }
+
+    public List<Alocacao> listarTodas() {
+        return repo.findAll();
+    }
+
+    // --- METODOS ADMINISTRATIVOS (CRUD com DTOs) ---
 
     public List<AlocacaoDTO> listar() {
         return repo.findAll().stream()
@@ -77,6 +94,10 @@ public class AlocacaoService {
 
         Alocacao saved = repo.save(alocacao);
         return new AlocacaoDTO(saved.getId(), saved.getProfessor(), saved.getDisciplina(), saved.getTurma());
+    }
+
+    public Alocacao salvar(Alocacao alocacao) {
+        return repo.save(alocacao);
     }
 
     public void deletar(Long id) {
