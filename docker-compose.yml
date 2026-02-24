@@ -1,0 +1,28 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: postgres
+    environment:
+      POSTGRES_DB: gestao_escolar
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 0215
+    ports:
+      - "5434:5432"
+
+  backend:
+    build: .
+    container_name: gestao_escolar
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/gestao_escolar
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 0215
+    ports:
+      - "9092:9092"
+
+  frontend:
+    build:
+      context: ../edu-gestor
+    ports:
+      - "9091:80"
