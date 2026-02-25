@@ -1,7 +1,7 @@
 pipeline {
     agent any
 
-    environment {clear
+    environment {
         COMPOSE_FILE = "docker-compose.yml"
         PROJECT_NAME = "gestao-escolar"
     }
